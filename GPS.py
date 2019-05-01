@@ -7,7 +7,7 @@ import serial
 
 class GPSManager:
     def __init__(self):
-        self.uart = serial.Serial("/dev/ttyO1", baudrate=9600, timeout=3000)
+        self.uart = serial.Serial("/dev/ttyO2", baudrate=9600, timeout=3000)
         self.gps = adafruit_gps.GPS(self.uart, debug=False)
         # Turn on the basic GGA and RMC info (what you typically want)
         self.gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
