@@ -3,10 +3,6 @@ from driver.esc.central import ESCCentral
 from driver.servo.central import ServoCentral
 from driver.remote_control import RemoteControl 
 
-#PINOUT
-PIN_CURRENT_SENSOR = "PLACEHOLDER"
-UART_GPS_PORT = "" #UART2
-
 class Robot:
     def __init__(self):
         self.sensor_central = SensorCentral()
@@ -16,7 +12,7 @@ class Robot:
 
     def handle_remote_command(self, command):
         print('Got command:', command)
-    
+
 
 if __name__ == "__main__":
     robot = Robot()
