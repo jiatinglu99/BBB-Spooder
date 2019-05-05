@@ -9,23 +9,13 @@ import threading
 
 class GyroscopeSensor:
     def __init__(self):
-        self.refresh_rate = 200
-        self.refresh_time = 0 #1.0/self.refresh_rate
-        self.imu = mpu9250.IMU(enable_dmp=False)
+        # set state to rcpy.RUNNING
+        rcpy.set_state(rcpy.RUNNING)
+        # no magnetometer
+        mpu9250.initialize(enable_magnetometer = False)
 
         # start the sensor
         rcpy.set_state(rcpy.RUNNING)
-        self.imu.initialize(enable_magnetometer=False)
-        self.data = {}
-
-        update_thread = threading.Thread(target=update)
-        update_thread.daemon = thread_update
-        update_thread.start()
-
-    def update(self):
-        while rcpy.get_state() == rcpy.RUNNING:
-            self.data = imu.read()
-            time.sleep(self.refresh_time)
 
     def get_data(self):
-        return self.data
+        return mpu9250.read()
