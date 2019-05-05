@@ -3,9 +3,6 @@ from .current_monitor import CurrentSensor
 from .gyroscope import GyroscopeSensor
 from .proximity import ProximitySensor
 
-import time
-import threading
-
 class SensorCentral:
     def __init__(self):
         self.gps = GPSSensor()
@@ -13,22 +10,11 @@ class SensorCentral:
         self.gyroscope = GyroscopeSensor()
         self.proximity = ProximitySensor()
 
-        # sensor threads
-        self.threads = []
-        #self.threads.append(threading.Thread(target = self.gps.thread_update()))
-        #self.threads.append(threading.Thread(target = self.current.thread_update()))
-        self.threads.append(threading.Thread(target = self.gyroscope.thread_update()))
-        #self.threads.append(threading.Thread(target = self.proximity.thread_update()))
-
-        # start threading
-        for t in self.threads:
-            t.start()
-
-    def getGPS(self):
+    def get_gps(self):
         pass
 
-    def getCurrent(self):
+    def get_current(self):
         pass
 
-    def getGyroscope(self):
+    def get_gyroscope(self):
         return self.gyroscope.get_data()
