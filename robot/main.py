@@ -1,7 +1,7 @@
 from driver.sensor.central import SensorCentral
 from driver.esc.central import ESCCentral
 from driver.servo.central import ServoCentral
-from driver.remote_control import RemoteControl
+from driver.remote.remote_control import RemoteControl
 
 class Robot:
     def __init__(self):

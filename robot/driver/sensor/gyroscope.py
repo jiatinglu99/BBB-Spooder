@@ -12,10 +12,14 @@ class GyroscopeSensor:
         # set state to rcpy.RUNNING
         rcpy.set_state(rcpy.RUNNING)
         # no magnetometer
-        mpu9250.initialize(enable_magnetometer = False)
-
+        mpu9250.initialize(
+            enable_dmp=True,
+            dmp_sample_rate=200,
+            enable_fusion=True,
+            enable_magnetometer=True
+        )
         # start the sensor
         rcpy.set_state(rcpy.RUNNING)
 
     def get_data(self):
-        return mpu9250.read()
+        return mpu9250.read()['tb']

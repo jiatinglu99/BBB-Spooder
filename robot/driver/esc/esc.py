@@ -26,18 +26,18 @@ class ESC:
         self.awake = True
 
     def set_throttle(self, throttle):
-        assert(self.awake, "ESC is not awake yet; wakeup() first.")
-
+        assert self.awake, "ESC is not awake yet; wakeup() first."
+        
         self.esc.set(throttle)
         clk = self.esc.start(1 / self.FREQ)
 
     def pulse_throttle(self, throttle):
-        assert(self.awake, "ESC is not awake yet; wakeup() first.")
+        assert self.awake, "ESC is not awake yet; wakeup() first."
 
         self.esc.pulse(throttle)
 
     def sweep(self, duration):
-        assert(self.awake, "ESC is not awake yet; wakeup() first.")
+        assert self.awake, "ESC is not awake yet; wakeup() first."
 
         sweep_limit = 0.5
         dir = 1
