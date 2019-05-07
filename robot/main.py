@@ -18,7 +18,7 @@ class Robot:
         if type == RemoteControl.CMD_SET_MODE:
             print('Set mode:', body)
         elif type == RemoteControl.CMD_MOTION:
-            pitch, yaw, roll, throttle = body.
+            pitch, yaw, roll, throttle = body.split(',')
 
     def controller_disconnected(self):
         print('Controller disconnected')
