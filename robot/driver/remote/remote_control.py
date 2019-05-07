@@ -40,3 +40,6 @@ class UDPHandler(socketserver.BaseRequestHandler):
                 print(e)
 
         self.server.central_handler.controller_disconnected()
+        
+class ThreadingUDPServer(ThreadingMixIn, UDPServer):
+    pass
