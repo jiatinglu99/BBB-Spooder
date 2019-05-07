@@ -1,5 +1,3 @@
- # https://docs.python.org/2/library/socketserver.html
-
 import socket
 import threading
 
