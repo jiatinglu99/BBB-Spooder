@@ -14,7 +14,7 @@ class RemoteControl:
     def __init__(self, **kwargs):
         try:
             HOST, PORT = "192.168.8.1", 9999
-            server = ThreadingUDPServer((HOST, PORT), UDPHandler)
+            server = socketserver.ThreadingUDPServer((HOST, PORT), UDPHandler)
             server.central_handler = kwargs["handler"]
 
             server_thread = threading.Thread(target=server.serve_forever)
@@ -40,6 +40,3 @@ class UDPHandler(socketserver.BaseRequestHandler):
                 print(e)
 
         self.server.central_handler.controller_disconnected()
-        
-class ThreadingUDPServer(ThreadingMixIn, UDPServer):
-    pass
