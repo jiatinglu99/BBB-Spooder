@@ -10,20 +10,15 @@ class Robot:
         self.servo_central = ServoCentral()
         self.remote_control = RemoteControl(handler=self)
 
-    def controller_connected(self):
-        print('Controller connected')
-
-    # Like GOD
     def controller_commanded(self, type, body):
-        if type == RemoteControl.CMD_SET_MODE:
-            print('Set mode:', body)
-        elif type == RemoteControl.CMD_MOTION:
-            pitch, yaw, roll, throttle = body.split(',')
-
-    def controller_disconnected(self):
-        print('Controller disconnected')
-        # Land/stop?
-
+        if type == RemoteControl.CMD_HELLO:
+            print('Connected!')
+        elif type == RemoteControl.CMD_UPDATE:
+            print(body)
+        elif type == RemoteControl.CMD_MODE:
+            print('Set mode', body)
+        elif type == RemoteControl.CMD_GOODBYE:
+            print('Disconnected!')
 
 if __name__ == "__main__":
     robot = Robot()
