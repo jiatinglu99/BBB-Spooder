@@ -36,7 +36,7 @@ class UDPHandler(socketserver.BaseRequestHandler):
                     print(data)
                     # type, body = str(command).split(':')
                     # self.server.central_handler.controller_commanded(type, body)
-            except: ConnectionResetError:
-                break
+            except ConnectionResetError as e:
+                print(e)
 
         self.server.central_handler.controller_disconnected()
