@@ -11,14 +11,18 @@ class Robot:
         self.remote_control = RemoteControl(handler=self)
 
     def controller_connected(self):
-        pass
+        print('Controller connected')
 
     # Like GOD
     def controller_commanded(self, type, body):
-        pass
+        if type == RemoteControl.CMD_SET_MODE:
+            print('Set mode:', body)
+        elif type == RemoteControl.CMD_MOTION:
+            pitch, yaw, roll, throttle = body.
 
     def controller_disconnected(self):
-        pass
+        print('Controller disconnected')
+        # Land/stop?
 
 
 if __name__ == "__main__":

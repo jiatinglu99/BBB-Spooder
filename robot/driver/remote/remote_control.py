@@ -5,6 +5,13 @@ import time
 import threading
 
 class RemoteControl:
+    ### Command types
+    # Pitch, yaw, roll, throttle
+    CMD_MOTION = 0
+    # Tell the robot, I would like to fly now, or I would rather stay walking (maybe find a way for this to automatically happen)
+    CMD_SET_MODE = 1
+
+
     def __init__(self, **kwargs):
         try:
             HOST, PORT = "192.168.8.1", 9999
