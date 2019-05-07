@@ -8,10 +8,17 @@ class Servo:
         self.ID = ID
         self.currentPosition = 0
         self.desiredPosition = 0
+        self.currentAmp = 0
         self.polarity = polarity
         self.offset = offset
 
-    def command_position_str(self, degree):
+    def getCommandPositionStr(self, degree): 
         self.desiredPosition = int(degree*10)
-        return "#{}PD{}\r".format(self.ID, self.desiredPosition)
+        return "#{}D{}\r".format(self.ID, self.desiredPosition)
+
+    def getCurrentAmp(self):
+        return self.currentAmp
     
+    def updateAmp(self, amp):
+        self.currentAmp = amp
+        return None
