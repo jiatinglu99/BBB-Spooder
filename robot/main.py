@@ -57,16 +57,16 @@ class Robot:
 
     ### Handles the commands for PID
     def handle_quad_pid(self, normalized_components):
-        # target values
-        yaw, throttle, roll, pitch = normalized_components
+        yaw, throttle, roll, pitch = normalized_components                      # target values
+        current_gyroscope = self.sensor_central.get_gyroscope()                 # current values
+        throttles = [throttle, throttle, throttle, throttle]                    # future throttles; throttles of each propellor (0-3)
         print(yaw, throttle, roll, pitch)
-        # throttles of each propellor, 0-3 (we 0 index; come on now)
-        throttles = [throttle, throttle, throttle, throttle]
-
-        # yaw not yet; idk how to do it yet
-        pass
-
-        current_gyroscope = self.sensor_central.get_gyroscope()
+        # yaw -- might have to flip += and -=; also, will have to experiment with yaw_k
+        yaw_k = 0.05
+        throttles[0] += yaw * yaw_k
+        throttles[1] += yaw * yaw_k
+        throttles[2] -= yaw * yaw_k
+        throttles[3] -= yaw * yaw_k
         # roll -- might have to flip += and -=
         self.roll_pid.SetPoint = roll
         self.roll_pid.update(current_gyroscope[0])
@@ -83,7 +83,6 @@ class Robot:
         throttles[3] += pitch_pid_output
         throttles[2] -= pitch_pid_output
         throttles[1] -= pitch_pid_output
-
         # push throttles to esc_central
         throttles = map(lambda n: clamp(n, 0, 1), throttles)                    # ensure throttles are between 0 and 1
 
