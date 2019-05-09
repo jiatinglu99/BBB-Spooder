@@ -1,47 +1,30 @@
-# https://docs.python.org/2/library/socketserver.html
-
-import socketserver
-import time
+import socket
 import threading
+from time import time
 
 class RemoteControl:
-    ### Command types
+    ### Command types ###
     # Pitch, yaw, roll, throttle
-    CMD_MOTION = 0
+    CMD_UPDATE = '1'
     # Tell the robot, I would like to fly now, or I would rather stay walking (maybe find a way for this to automatically happen)
-    CMD_SET_MODE = 1
-
+    CMD_MODE = '2'
 
     def __init__(self, **kwargs):
-        try:
-            HOST, PORT = "192.168.8.1", 9999
-            server = ThreadedTCPServer((HOST, PORT), TCPHandler)
-            server.central_handler = kwargs["handler"]
+        self.handler = kwargs['handler']
+        HOST, PORT = '192.168.8.1', 9999
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.bind((HOST, PORT))
+        thread = threading.Thread(target=self.loop)
+        thread.start()
 
-            server_thread = threading.Thread(target=server.serve_forever)
-            server_thread.daemon = True
-            server_thread.start()
-        except OSError:
-            print("Could not start server:", error)
-
-class TCPHandler(socketserver.StreamRequestHandler):
-    def handle(self):
-        self.server.central_handler.controller_connected()
-
+    def loop(self):
         while True:
-            try:
-                command = self.rfile.readline().strip()
-                if not command: break
+            data, addr = self.sock.recvfrom(17)
+            string = data.decode('utf-8')
+            self.handler.controller_commanded(Command(type=string[0], body=string[1:]))
 
-                if command != b'':
-                    # Commands come in the form `{type}:{body}`
-                    type, body = str(command).split(':')
-                    self.server.central_handler.controller_commanded(type, body)
-            except: ConnectionResetError:
-                break
-
-        self.server.central_handler.controller_disconnected()
-
-# Run on a background thread. Thread swapping might cause problems later. We'll see.
-class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
-    pass
+class Command:
+    def __init__(self, **kwargs):
+        self.type = kwargs['type']
+        self.body = kwargs['body']
+        self.timestamp = time()
