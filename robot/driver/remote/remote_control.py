@@ -21,10 +21,10 @@ class RemoteControl:
         while True:
             data, addr = self.sock.recvfrom(17)
             string = data.decode('utf-8')
-            self.handler.controller_commanded(Command(type=string[0], body=string[1:]))
+            self.handler.controller_commanded(Command(string[0], string[1:]))
 
 class Command:
-    def __init__(self, **kwargs):
-        self.type = kwargs['type']
-        self.body = kwargs['body']
+    def __init__(self, type, body):
+        self.type = type
+        self.body = body
         self.timestamp = time()
