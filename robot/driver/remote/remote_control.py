@@ -1,19 +1,13 @@
 import socket
 import threading
+from time import time
 
 class RemoteControl:
     ### Command types ###
-    """
-        It might not make sense to have hello or goodbye messages because they are not guaranteed to come in the right order or at all.
-    """
-    # Controller connected
-    CMD_HELLO = '0'
     # Pitch, yaw, roll, throttle
     CMD_UPDATE = '1'
     # Tell the robot, I would like to fly now, or I would rather stay walking (maybe find a way for this to automatically happen)
     CMD_MODE = '2'
-    # Controller disconnected
-    CMD_GOODBYE = '3'
 
     def __init__(self, **kwargs):
         self.handler = kwargs['handler']
@@ -27,4 +21,10 @@ class RemoteControl:
         while True:
             data, addr = self.sock.recvfrom(17)
             string = data.decode('utf-8')
-            self.handler.controller_commanded(string[0],string[1:])
+            self.handler.controller_commanded(Command(type=string[0], body=string[1:]))
+
+class Command:
+    def __init__(self, **kwargs):
+        self.type = kwargs['type']
+        self.body = kwargs['body']
+        self.timestamp = time()
