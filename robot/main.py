@@ -85,6 +85,7 @@ class Robot:
         throttles[1] -= pitch_pid_output
         # push throttles to esc_central
         throttles = map(lambda n: clamp(n, 0, 1), throttles)                    # ensure throttles are between 0 and 1
+        self.esc_central.set_throttles(throttles)
 
     # delegate method for RemoteControl
     def controller_commanded(self, command):
