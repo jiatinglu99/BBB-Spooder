@@ -1,4 +1,4 @@
-from esc import ESC
+from driver.esc.esc import ESC
 
 class ESCCentral:
     def __init__(self):

@@ -1,5 +1,5 @@
-from servo import Servo
+from driver.servo.lss import LSS
 
 class ServoCentral:
     def __init__(self):
-        
+        pass
