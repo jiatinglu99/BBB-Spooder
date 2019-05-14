@@ -1,6 +1,7 @@
 import socket
 import threading
 from time import time
+from video_streamer import VideoStreamer
 
 class RemoteControl:
     ### Command types ###
@@ -19,9 +20,13 @@ class RemoteControl:
 
     def loop(self):
         while True:
-            data, addr = self.sock.recvfrom(17)
+            data, addr = self.sock.recvfrom(13)
+            self.set_client(addr)
             string = data.decode('utf-8')
             self.handler.controller_commanded(Command(string[0], string[1:]))
+
+    def set_client(self, addr):
+        print("Connected to", addr)
 
 class Command:
     def __init__(self, type, body):

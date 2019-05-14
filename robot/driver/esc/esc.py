@@ -27,7 +27,7 @@ class ESC:
 
     def set_throttle(self, throttle):
         assert self.awake, "ESC is not awake yet; wakeup() first."
-        
+
         self.esc.set(throttle)
         clk = self.esc.start(1 / self.FREQ)
 
