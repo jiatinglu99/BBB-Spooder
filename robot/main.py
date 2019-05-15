@@ -39,7 +39,7 @@ class Robot:
             # take appropriate action given command type
             type, body = self.last_command.type, self.last_command.body
             if type == RemoteControl.CMD_UPDATE:
-                commands = [body[i:i+4] for i in range(0, len(body), 4)]        # commands always come in as YYYYTTTTRRRRPPPP
+                commands = [body[i:i+4] for i in range(0, len(body), 4)]        # commands always come in as XXXX XXXX YYYY
                 self.handle_quad_pid(self.normalize_components(commands))       # handle quad movement after normalizing components
             elif type == RemoteControl.CMD_MODE:
                 print('Set mode', body)
@@ -54,39 +54,6 @@ class Robot:
         roll = (roll - 1000) / (50 / 3)                                         # -60 deg below horizontal to +60 deg below horizontal
         pitch = (1000 - pitch) / (50 / 3)                                       # -60 deg below horizontal to +60 deg below horizontal
         return map(lambda x: round(x, 3), [yaw, throttle, roll, pitch])         # round to 3 decimal points
-
-    ### Handles the commands for PID
-    def handle_quad_pid(self, normalized_components):
-        yaw, throttle, roll, pitch = normalized_components                      # target values
-        current_gyroscope = self.sensor_central.get_gyroscope()                 # current values
-        throttles = [throttle, throttle, throttle, throttle]                    # future throttles; throttles of each propellor (0-3)
-        print(yaw, throttle, roll, pitch)
-        # yaw -- might have to flip += and -=; also, will have to experiment with yaw_k
-        yaw_k = 0.05
-        throttles[0] += yaw * yaw_k
-        throttles[1] += yaw * yaw_k
-        throttles[2] -= yaw * yaw_k
-        throttles[3] -= yaw * yaw_k
-        # roll -- might have to flip += and -=
-        self.roll_pid.SetPoint = roll
-        self.roll_pid.update(current_gyroscope[0])
-        roll_pid_output = self.roll_pid.output
-        throttles[0] += roll_pid_output
-        throttles[2] += roll_pid_output
-        throttles[1] -= roll_pid_output
-        throttles[3] -= roll_pid_output
-        # pitch -- might have to flip += and -=
-        self.pitch_pid.SetPoint = pitch
-        self.pitch_pid.update(current_gyroscope[1])
-        pitch_pid_output = self.pitch_pid.output
-        throttles[0] += pitch_pid_output
-        throttles[3] += pitch_pid_output
-        throttles[2] -= pitch_pid_output
-        throttles[1] -= pitch_pid_output
-        # push throttles to esc_central
-        throttles = map(lambda n: clamp(n, 0, 1), throttles)                    # ensure throttles are between 0 and 1
-        # self.esc_central.set_throttles(throttles)
-        print(throttles, end='\r')
 
     # delegate method for RemoteControl
     def controller_commanded(self, command):

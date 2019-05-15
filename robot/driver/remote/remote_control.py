@@ -1,6 +1,8 @@
 import socket
 import threading
 from time import time
+# from driver.remote.video_streamer import VideoStreamer
+from video_streamer import VideoStreamer
 
 class RemoteControl:
     ### Command types ###
@@ -11,7 +13,9 @@ class RemoteControl:
 
     def __init__(self, **kwargs):
         self.handler = kwargs['handler']
-        HOST, PORT = '192.168.8.1', 9999
+        self.streamer = VideoStreamer()
+
+        HOST, PORT = '0.0.0.0', 9999#'192.168.8.1', 9999
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((HOST, PORT))
         thread = threading.Thread(target=self.loop)
@@ -19,7 +23,8 @@ class RemoteControl:
 
     def loop(self):
         while True:
-            data, addr = self.sock.recvfrom(17)
+            data, addr = self.sock.recvfrom(13)
+            self.streamer.set_client(self.sock, addr)
             string = data.decode('utf-8')
             self.handler.controller_commanded(Command(string[0], string[1:]))
 
@@ -28,3 +33,16 @@ class Command:
         self.type = type
         self.body = body
         self.timestamp = time()
+
+
+
+class TestMain:
+    def __init__(self):
+        rc = RemoteControl(handler=self)
+
+    def controller_commanded(self, command):
+        # print(command.body)
+        pass
+
+if __name__ == '__main__':
+    main = TestMain()
