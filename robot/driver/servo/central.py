@@ -48,10 +48,18 @@ class ServoCentral:
     def push_position(self): # push desired angles onto the physical servos through serial
         self.ser.write(self.get_write_commands())
         
+    def test_leg(self, number):
+        self.legs[number].update_desired_coordinates(10, 10, 10)
+        self.legs[number].calculate_angles()
+        
 def test():
     SC = ServoCentral()
     SC.stretch_legs()
     SC.run()
+    time.sleep(0.5)
+    SC.test_leg(0)
+    SC.run()
+    
         
 if __name__ == '__main__':
     test()
