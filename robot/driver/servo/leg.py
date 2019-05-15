@@ -3,7 +3,7 @@ from robot.driver.servo.lss import Servo
 
 class Leg:
     def __init__(self, sel=0, ID1=0, P1=True, O1=0, ID2=0, P2=True, O2=0, ID3=0, P3=True, O3=0):
-        self.sel = sel# config selection 
+        self.sel = sel# config selection
         self.servos = []
         # base leg for Yaw
         self.servos = [
@@ -14,7 +14,7 @@ class Leg:
         # storing ID numbers for all
         self.IDlist = [ID1, ID2, ID3]
         # Acquire position for each servo upon power up
-        
+
         self.config_init()
 
     def config_init(self):
@@ -30,11 +30,11 @@ class Leg:
             self.servos[0].set_safe_parameters(0, 0, 0)
         self.servos[1].set_safe_parameters(0, 0, 0)
         self.servos[2].set_safe_parameters(0, 0, 0)
-        
+
     def stretch(self):
         for servo in self.servos:
             servo.get_in_safe_position()
-        
+
     def get_command_bytes(self):
         temp = b''
         for servo in self.servos:

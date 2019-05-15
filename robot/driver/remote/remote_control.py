@@ -1,8 +1,7 @@
 import socket
 import threading
 from time import time
-# from driver.remote.video_streamer import VideoStreamer
-from video_streamer import VideoStreamer
+from driver.remote.video_streamer import VideoStreamer
 
 class RemoteControl:
     ### Command types ###
@@ -33,16 +32,3 @@ class Command:
         self.type = type
         self.body = body
         self.timestamp = time()
-
-
-
-class TestMain:
-    def __init__(self):
-        rc = RemoteControl(handler=self)
-
-    def controller_commanded(self, command):
-        # print(command.body)
-        pass
-
-if __name__ == '__main__':
-    main = TestMain()
