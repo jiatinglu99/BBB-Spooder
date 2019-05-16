@@ -57,7 +57,12 @@ class Leg:
         S = sqrt(sqrd(CLT-self.length_a)+sqrd(coord_c))
         angle_a = acos(coord_b/CLT)
         X = (sqrd(S)-sqrd(self.length_b)-sqrd(self.length_c))/(-2*self.length_b*self.length_c)
-        angle_c = 180 - acos()
+        angle_c = 180 - acos(X)
+        M = atan2((coord_c), (CLT-self.length_a))
+        angle_b = asin((self.length_c*sin(180-angle_c)/S))-M
+        self.servos[0].update_desired_position(angle_a)
+        self.servos[1].update_desired_position(angle_b)
+        self.servos[2].update_desired_position(angle_c)
         
     def update_desired_coordinates(self, a, b, c):
         self.desired_coordinates = (a,b,c)

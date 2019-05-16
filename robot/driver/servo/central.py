@@ -51,6 +51,7 @@ class ServoCentral:
     def test_leg(self, number):
         self.legs[number].update_desired_coordinates(10, 10, 10)
         self.legs[number].calculate_angles()
+        print(self.legs[number].get_command_bytes())
         
 def test():
     SC = ServoCentral()
@@ -58,7 +59,7 @@ def test():
     SC.run()
     time.sleep(0.5)
     SC.test_leg(0)
-    SC.run()
+    #SC.run()
     
         
 if __name__ == '__main__':
