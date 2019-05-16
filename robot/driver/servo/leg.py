@@ -1,5 +1,5 @@
 from robot.driver.servo.lss import Servo
-from robot.driver.helpers.DegreeMath import * 
+from robot.driver.helpers.DegreeMath import *
 
 class Leg:
     def __init__(self, sel=0, ID1=0, P1=True, O1=0, ID2=0, P2=True, O2=0, ID3=0, P3=True, O3=0):
@@ -63,7 +63,19 @@ class Leg:
         self.servos[0].update_desired_position(angle_a)
         self.servos[1].update_desired_position(angle_b)
         self.servos[2].update_desired_position(angle_c)
-        
+
+    def daniel_calculate_angles(self):
+        coord_x, coord_y, coord_z = self.current_coordinates
+        length_d = sqrt(z**2 + (y-length_a)**2)
+
+        angle_a = atan2(x, y)
+        angle_c = acos((length_b**2 + length_c**2 - length_d**2) / (2 * length_b * length_c))
+        angle_b = asin(length_c / length_d * sin(angle_c)) - atan(z/y)
+
+        self.servos[0].update_desired_position(angle_a)
+        self.servos[1].update_desired_position(angle_b)
+        self.servos[2].update_desired_position(180 - angle_c)
+
     def update_desired_coordinates(self, a, b, c):
         self.desired_coordinates = (a,b,c)
 
