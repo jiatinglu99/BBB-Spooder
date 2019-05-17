@@ -13,6 +13,16 @@ class Servo:
         self.current_amp = 0
         self.polarity = polarity
         self.offset = offset
+        
+        self.motion_controll = 1 # EM 1 or 0
+        self.angular_stiffness = 0 # AS -10 to 10, -4 to 4 on the margin
+        self.angular_holding_stiffness = 0 # AH -10 to 10
+        self.angular_acceleration = 1 # AA 1-100
+        self.angular_deceleration = 1 # AD 1-100
+        self.baudrate = 115200 # QB cannot be changed on serial, must be done 
+        self.gyre_direction = 1 # CG
+        if not self.polarity:
+            self.gyre_direciton = -1
 
     def set_safe_parameters(self, init, forward, backward):
         self.safe_init = init
@@ -31,10 +41,19 @@ class Servo:
 
     def get_position_command_bytes(self):
         #print("#{}D{}\r".format(self.ID, int(self.desiredPosition*10)).encode())
-        if self.polarity:
-            return "#{}D{}\r".format(self.ID, int(self.desired_position*10)).encode()
-        else:
-            return "#{}D{}\r".format(self.ID, -int(self.desired_position*10)).encode()
+        #return "#{}CB115200\r".format(self.ID).encode()
+        if self.ID == 17: return b''
+        return "#{}D{}AS-4EM0\r".format(self.ID, int(self.desired_position*10)).encode()
+            
+    def get_initialize_command_bytes(self):
+        temp = b''
+        temp += "#{}AS-4EM0\r".format(self.ID, self.angular_stiffness).encode()
+        #temp += "#{}CAH{}\r".format(self.ID, self.angular_holding_stiffness).encode()
+        #temp += "#{}CAA{}\r".format(self.ID, self.baudrate).encode() #CAA accelration
+        #temp += "#{}CAD{}\r".format(self.ID, self.angular_deceleration).encode()
+        #temp += "#{}CG{}\r".format(self.ID, self.gyre_direction).encode() #inittialize
+        #temp += "#{}CEM{}\r".format(self.ID, self.motion_controll).encode()
+        return temp
 
     def get_current_amp(self):
         return self.current_amp
