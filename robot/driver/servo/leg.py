@@ -18,14 +18,17 @@ class Leg:
         # storing ID numbers for all
         self.IDlist = [ID1, ID2, ID3]
         # Acquire position for each servo upon power up
-        self.desired_coordinates = (17,17,0)
+        self.desired_coordinates = [17,15,10]
         self.current_coordinates = self.acquire_positions()
         
         self.safe_walking_range = (0,0,0,0) # (front_extreme, back_extreme, extention_out, normal_height)
         self.config_init()
+        self.increment = 0
+        self.lift = False # lift actually means "is stepping back"
+        self.SWITCH_NOW = False
 
     def acquire_positions(self):
-        return (0,0,0)
+        return [0,0,0]
 
     def config_init(self):
         if self.sel == 4:
@@ -68,7 +71,7 @@ class Leg:
         front_extreme_outer = 10
         common_out_inner = 10
         common_out_outer = 6
-        common_height = 
+        common_height = 15
         if self.sel == 0 or self.sel == 1:
             self.safe_walking_range = (front_extreme_inner, front_extreme_inner-walk_length, common_out_inner, common_height)
         elif self.sel == 2 or self.sel == 3:
@@ -102,11 +105,34 @@ class Leg:
         self.servos[1].update_desired_position(angle_b)
         self.servos[2].update_desired_position(-angle_c)
         
+    def walk_proceed(self, thrt):
+        self.increment = thrt
+        temp = self.desired_coordinates
+        if self.lift:
+            self.desired_coordinates = [temp[0] + self.increment*5 ,temp[1],temp[2]]
+            if self.sel == 4: print(temp[0])
+            if temp[0] > self.safe_walking_range[0]:
+                self.lift = False
+                self.SWITCH_NOW = True
+        else:
+            self.desired_coordinates = [temp[0] - self.increment, temp[1], temp[2]]
         
+    def is_done(self):
+        if self.sel == 4:
+            print(self.lift, self.SWITCH_NOW)
+        temp = self.desired_coordinates
+        if self.SWITCH_NOW:
+            self.SWITCH_NOW = False
+            return True
+        if not self.lift and temp[0] < self.safe_walking_range[1]: # case of stepping normally and reaches the end
+            self.go_to_front() # tell leg to go to front
+            #return False
+        return False
         
     def daniel_calculate_angles(self):
         x, y, z = self.desired_coordinates
-
+        if self.lift:
+            z = self.desired_coordinates[2]-3
         angle_a = atan2(x, y)
         
         y=sqrt(x**2 + y**2)
@@ -121,8 +147,6 @@ class Leg:
         self.servos[0].update_desired_position(angle_a)
         self.servos[1].update_desired_position(angle_b)
         self.servos[2].update_desired_position(-(180 - angle_c))
-        
-
         
     def update_desired_coordinates(self, a, b, c):
         self.desired_coordinates = (a,b,c)
@@ -139,3 +163,14 @@ class Leg:
         for servo in self.servos:
             temp += servo.get_initialize_command_bytes()
         return temp
+        
+    def go_to_front(self): #NEEDS WORK
+        #self.desired_coordinates[0] = self.safe_walking_range[0]
+        self.lift = True #imma need to lift
+        pass
+    
+    def go_to_percent(self, percent):
+        temp = self.desired_coordinates
+        length = self.safe_walking_range[0] - self.safe_walking_range[1]
+        begin = self.safe_walking_range[1]
+        self.desired_coordinates[0] = begin + percent*length

@@ -42,12 +42,12 @@ class Servo:
     def get_position_command_bytes(self):
         #print("#{}D{}\r".format(self.ID, int(self.desiredPosition*10)).encode())
         #return "#{}CB115200\r".format(self.ID).encode()
-        if self.ID == 17: return b''
-        return "#{}D{}AS-4EM0\r".format(self.ID, int(self.desired_position*10)).encode()
+        #if self.ID == 17: return b''
+        return "#{}D{}AS-2EM0\r".format(self.ID, int(self.desired_position*10)).encode() #AS-4EM0
             
     def get_initialize_command_bytes(self):
         temp = b''
-        temp += "#{}AS-4EM0\r".format(self.ID, self.angular_stiffness).encode()
+        #temp += "#{}AS-4EM0\r".format(self.ID, self.angular_stiffness).encode()
         #temp += "#{}CAH{}\r".format(self.ID, self.angular_holding_stiffness).encode()
         #temp += "#{}CAA{}\r".format(self.ID, self.baudrate).encode() #CAA accelration
         #temp += "#{}CAD{}\r".format(self.ID, self.angular_deceleration).encode()

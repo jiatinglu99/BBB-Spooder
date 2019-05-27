@@ -12,6 +12,11 @@ class ServoCentral:
         1           Working, and providing torque
         2           Limp
         '''
+        
+        #Walk Sequences
+        self.step_counter = 0
+        self.sequences = [6,3,0,5,7,2,1,4]
+        
         self.legs = [
             Leg(sel=0,  ID1=1, P1=True, O1=1772,    ID2=2, P2=False, O2=904,    ID3=3, P3=False, O3=1739),   # 0: inner leg top left
             Leg(sel=1,  ID1=4, P1=False, O1=427,    ID2=5, P2=True, O2=-14,     ID3=6, P3=True, O3=-435),    # 1: inner leg top right
@@ -27,16 +32,49 @@ class ServoCentral:
         self.push_initialize_commands()
         time.sleep(0.5)
         
+    def walk_test(self, thrt):
+        self.prepare_for_walk()
+        time.sleep(1)
+        while True:
+            self.walk_main(thrt)
+            self.run()
+            
+    
+    def prepare_for_walk(self):
+        for i in range(0,8):
+            self.legs[self.sequences[i]].go_to_percent(i/8*1.12)
+        
     def reset_all_servos(self):
         #self.ser.write("#254QB500000\r".encode())
         self.ser.write("#254RESET\r".encode())
         
     def push_initialize_commands(self):
         self.ser.write(self.get_initialize_commands())
+        
+    def walk_main(self, thrt):
+        for leg in self.legs:
+            leg.walk_proceed(thrt) # continue the increment on each walk path
+        for i in range(0,8):
+            self.should_switch_leg(i)
+        # if self.should_switch_leg(self.step_counter):
+        #     print(self.step_counter)
+        #     self.step_counter += 1
+        #     if self.step_counter >= 8:
+        #         self.step_counter = 0
+                
+    def should_switch_leg(self, ID):
+        if self.legs[ID].is_done():
+            return True
+        else:
+            return False
 
     def run(self):
         for leg in self.legs:
-            leg.daniel_calculate_angles()
+            try:
+                leg.daniel_calculate_angles()
+            except ValueError as e:
+                pass
+                #print(e)
         self.push_position()
         self.ser.flush()
 
@@ -47,6 +85,7 @@ class ServoCentral:
     def get_write_commands(self):
         temp = b''
         for leg in self.legs:
+            # leg.sel > 3 and leg.sel < 8:
             temp += leg.get_command_bytes()
             
         #return self.legs[3].get_command_bytes()
@@ -61,7 +100,6 @@ class ServoCentral:
     def push_position(self): # push desired angles onto the physical servos through serial
         self.ser.write(self.get_write_commands())
     
-        
     def test_leg(self, numb):
         reverse = True
         m = 2
@@ -106,19 +144,21 @@ class ServoCentral:
             #t=time.time()
             #self.reset_all_servos()
     def leg_test_range(self, leg_ID, front, back, out, height):
+        #self.legs[4].update_desired_coordinates(10, out, height)
         self.legs[4].update_desired_coordinates(10, out, height)#)m)
         self.legs[5].update_desired_coordinates(10, out, height)#)m)
         self.legs[6].update_desired_coordinates(-10, out, height)#)m)
         self.legs[7].update_desired_coordinates(-10, out, height)#)m)
         reverse = True
         x = back
-        inc = 0.2
+        inc = 0.1
         while True:
            # self.legs[4].update_desired_coordinates(x, out, height)
             #self.legs[5].update_desired_coordinates(x, out, height)
-            for leg in self.legs:
-                 if leg.sel == leg_ID:
-                     leg.update_desired_coordinates(x, out, height)
+            self.legs[0].update_desired_coordinates(x, out, height)
+            self.legs[1].update_desired_coordinates(x, out, height)
+            self.legs[2].update_desired_coordinates(-x, out, height)
+            self.legs[3].update_desired_coordinates(-x, out, height)
             #else:
             #    leg.stretch()
             self.run()
@@ -138,7 +178,8 @@ def test():
     time.sleep(0.1)
     #SC.test_leg(0)
     #SC.leg_test_range(4, 10, 4, 6, 18)
-    SC.leg_test_range(0, 5.5, -0.5, 10, 18)
+    #SC.leg_test_range(0, 5.5, -0.5, 10, 15)
+    SC.walk_test(0.2) 
     '''
     inner front leg
     ID  Front   Back    Out     Height
