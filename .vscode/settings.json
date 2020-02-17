@@ -1,4 +1,14 @@
 {
+    "python.jediEnabled": true,
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "python.pythonPath": "C:\\Users\\jiati\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe",
+    "python.linting.flake8Enabled": false,
+    "python.envFile": "${workspaceRoot}/.env",
+    "python.autoComplete.extraPaths": [
+        "./robot",
+        "./robot/driver",
+        "./robot/driver/sensor",   
+        "./robot/driver/servo"
+    ],
 }

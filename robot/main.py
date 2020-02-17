@@ -1,16 +1,12 @@
-from driver.sensor.central import SensorCentral
-from driver.esc.central import ESCCentral
 from driver.servo.central import ServoCentral
-from driver.remote.remote_control import RemoteControl, Command
-from pid import PID
+
 import time
+
 
 class Robot:
     ### Initializes the robot and all its peripheral centrals
     def __init__(self):
-        self.FREQ = 200 # updates per second
-        self.sensor_central = SensorCentral()
-        self.esc_central = ESCCentral()
+        self.FREQ = 200  # updates per second
         self.servo_central = ServoCentral()
         self.remote_control = RemoteControl(handler=self)
 
@@ -18,14 +14,6 @@ class Robot:
     def start_updating(self):
         # create last_command variable for future loops
         self.last_command = None
-        # setup pitch_pid
-        self.pitch_pid = PID(3.55, 0.005, 2.05)
-        self.pitch_pid.SetPoint=0.0
-        self.pitch_pid.setSampleTime(1 / self.FREQ / 2)
-        # setup roll_pid
-        self.roll_pid = PID(3.55, 0.005, 2.05)
-        self.roll_pid.SetPoint=0.0
-        self.roll_pid.setSampleTime(1 / self.FREQ / 2)
         # update
         while True:
             if self.last_command == None: continue                              # still waiting for the initial connection
