@@ -39,7 +39,7 @@ class ServoCentral:
         while True:
             self.walk_main(thrt)
             self.run()
-            elapsed_time = time.time() - start_time
+            elapsed_time = time.time() - self.t
             print elapsed_time
             self.t = time.time()
             
@@ -77,8 +77,7 @@ class ServoCentral:
             try:
                 leg.daniel_calculate_angles()
             except ValueError as e:
-                pass
-                #print(e)
+                print(e)
         self.push_position()
         self.ser.flush()
 
