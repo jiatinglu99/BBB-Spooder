@@ -31,6 +31,7 @@ class ServoCentral:
         self.reset_all_servos()
         self.push_initialize_commands()
         time.sleep(0.5)
+        self.prev_time = = time.time()
         
     def walk_test(self, thrt):
         self.prepare_for_walk()
@@ -38,6 +39,9 @@ class ServoCentral:
         while True:
             self.walk_main(thrt)
             self.run()
+            elapsed_time = time.time() - start_time
+            print elapsed_time
+            self.t = time.time()
             
     
     def prepare_for_walk(self):
@@ -54,8 +58,8 @@ class ServoCentral:
     def walk_main(self, thrt):
         for leg in self.legs:
             leg.walk_proceed(thrt) # continue the increment on each walk path
-        for i in range(0,8):
-            self.should_switch_leg(i)
+        #for i in range(0,8):
+        #    self.should_switch_leg(i)
         # if self.should_switch_leg(self.step_counter):
         #     print(self.step_counter)
         #     self.step_counter += 1

@@ -110,7 +110,7 @@ class Leg:
         temp = self.desired_coordinates
         if self.lift:
             self.desired_coordinates = [temp[0] + self.increment*5 ,temp[1],temp[2]]
-            if self.sel == 4: print(temp[0])
+            #if self.sel == 4: print(temp[0])
             if temp[0] > self.safe_walking_range[0]:
                 self.lift = False
                 self.SWITCH_NOW = True
@@ -118,8 +118,8 @@ class Leg:
             self.desired_coordinates = [temp[0] - self.increment, temp[1], temp[2]]
         
     def is_done(self):
-        if self.sel == 4:
-            print(self.lift, self.SWITCH_NOW)
+        #if self.sel == 4:
+        #    print(self.lift, self.SWITCH_NOW)
         temp = self.desired_coordinates
         if self.SWITCH_NOW:
             self.SWITCH_NOW = False

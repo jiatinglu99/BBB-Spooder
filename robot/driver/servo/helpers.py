@@ -19,8 +19,10 @@ def asin(x):
 def acos(x):
     return math.degrees(math.acos(x))
 
+
 def atan(x):
     return math.degrees(math.atan(x))
+
     
 def atan2(y, x):
     return math.degrees(math.atan2(y, x))
