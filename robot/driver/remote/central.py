@@ -3,6 +3,7 @@ import pygame
 class RemoteCentral:
     def __init__(self):
         pygame.init()
+        pygame.display.init()
 
         j = pygame.joystick.Joystick(0)
         j.init()
@@ -19,6 +20,5 @@ class RemoteCentral:
         except KeyboardInterrupt:
             print("ERROR in RemoteCentral")
             j.quit()
-            pygame.quit()
 
 remote_central = RemoteCentral()
