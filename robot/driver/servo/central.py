@@ -31,7 +31,7 @@ class ServoCentral:
         self.reset_all_servos()
         self.push_initialize_commands()
         time.sleep(0.5)
-        self.prev_time = = time.time()
+        self.t = time.time()
         
     def walk_test(self, thrt):
         self.prepare_for_walk()
