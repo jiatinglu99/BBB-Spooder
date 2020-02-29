@@ -6,7 +6,6 @@ class RemoteCentral:
 
         pygame.init()
 
-        pygame.init()
         j = pygame.joystick.Joystick(0)
         j.init()
 
