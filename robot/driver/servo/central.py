@@ -43,7 +43,7 @@ class ServoCentral:
             print elapsed_time
             self.t = time.time()
             
-    
+    # move each legs to i/8th of the entire period
     def prepare_for_walk(self):
         for i in range(0,8):
             self.legs[self.sequences[i]].go_to_percent(i/8*1.12)
@@ -60,11 +60,11 @@ class ServoCentral:
             leg.walk_proceed(thrt) # continue the increment on each walk path
         #for i in range(0,8):
         #    self.should_switch_leg(i)
-        # if self.should_switch_leg(self.step_counter):
-        #     print(self.step_counter)
-        #     self.step_counter += 1
-        #     if self.step_counter >= 8:
-        #         self.step_counter = 0
+        if self.should_switch_leg(self.step_counter):
+            #print(self.step_counter)
+            self.step_counter += 1
+            if self.step_counter >= 8:
+                self.step_counter = 0
                 
     def should_switch_leg(self, ID):
         if self.legs[ID].is_done():
@@ -109,7 +109,7 @@ class ServoCentral:
         d = 0
         out = 13
         #for i in range(5):
-        t=time.time()
+        #t=time.time()
         while True:
             for number in range(0,2):
                 self.legs[number].update_desired_coordinates(2, out, m)
@@ -146,6 +146,8 @@ class ServoCentral:
             #print(time.time()-t)
             #t=time.time()
             #self.reset_all_servos()
+
+    # older test with range
     def leg_test_range(self, leg_ID, front, back, out, height):
         #self.legs[4].update_desired_coordinates(10, out, height)
         self.legs[4].update_desired_coordinates(10, out, height)#)m)
@@ -200,3 +202,4 @@ def test():
         
 if __name__ == '__main__':
     test()
+  
