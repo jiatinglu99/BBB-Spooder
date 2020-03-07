@@ -17,4 +17,7 @@ class MyController(Controller):
            print("SQUARE released")
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=True)
+# For testing the buttons.
+while(True)
+    pass
 # controller.listen()
