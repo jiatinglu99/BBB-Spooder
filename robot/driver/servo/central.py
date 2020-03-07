@@ -27,7 +27,7 @@ class ServoCentral:
             Leg(sel=6,  ID1=19, P1=True, O1=-7,     ID2=20, P2=True, O2=5,      ID3=21, P3=True, O3=-427),   # 6: outer leg bottom left
             Leg(sel=7,  ID1=22, P1=False, O1=-916,  ID2=23, P2=False, O2=-5,    ID3=24, P3=False, O3=-906)   # 7: outer leg bottom right
         ]
-        self.ser = serial.Serial('/dev/ttyO1', baudrate = 115200, timeout = 1) # baudrate could be 5000000
+        self.ser = serial.Serial('/dev/ttyO1', baudrate = 500000, timeout = 1) # baudrate could be 500000, 115200
         self.reset_all_servos()
         self.push_initialize_commands()
         time.sleep(0.5)
@@ -40,7 +40,7 @@ class ServoCentral:
             self.walk_main(thrt)
             self.run()
             elapsed_time = time.time() - self.t
-            print elapsed_time
+            print 1.0/elapsed_time
             self.t = time.time()
             
     # move each legs to i/8th of the entire period
