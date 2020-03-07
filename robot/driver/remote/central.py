@@ -1,24 +1,8 @@
-import pygame
+from pyPS4Controller.controller import Controller
 
-class RemoteCentral:
-    def __init__(self):
-        pygame.init()
-        pygame.display.init()
+class MyController(Controller):
+    def __init__(self, **kwargs):
+        Controller.__init__(self, **kwargs)
 
-        j = pygame.joystick.Joystick(0)
-        j.init()
-
-        try:
-            while True:
-                events = pygame.event.get()
-                for event in events:
-                    if event.type == pygame.JOYBUTTONDOWN:
-                        print(event.dict, event.joy, event.button, 'pressed')
-                    elif event.type == pygame.JOYBUTTONUP:
-                        print(event.dict, event.joy, event.button, 'released')
-
-        except KeyboardInterrupt:
-            print("ERROR in RemoteCentral")
-            j.quit()
-
-remote_central = RemoteCentral()
+controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=True)
+controller.listen()
