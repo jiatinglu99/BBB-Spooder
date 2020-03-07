@@ -5,19 +5,17 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_triangle_release(self):
-           print("TRIANGLE released")
+        print("TRIANGLE released")
 
     def on_circle_release(self):
-           print("CIRCLE released")
+        print("CIRCLE released")
 
     def on_x_release(self):
-           print("X released")
+        print("X released")
 
     def on_square_release(self):
-           print("SQUARE released")
+        print("SQUARE released")
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=True)
 # For testing the buttons.
-while(True)
-    pass
-# controller.listen()
+controller.listen()
