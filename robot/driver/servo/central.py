@@ -46,10 +46,11 @@ class ServoCentral:
     # move each legs to i/8th of the entire period
     def prepare_for_walk(self):
         for i in range(0,8):
-            self.legs[self.sequences[i]].go_to_percent(i/8*1.12)
+            #print i/8.0*1.12
+            self.legs[self.sequences[i]].go_to_percent(i/8.0*1.13)
         
     def reset_all_servos(self):
-        #self.ser.write("#254QB500000\r".encode())
+        #self.ser.write("#254CB500000\r".encode())
         self.ser.write("#254RESET\r".encode())
         
     def push_initialize_commands(self):
@@ -58,13 +59,13 @@ class ServoCentral:
     def walk_main(self, thrt):
         for leg in self.legs:
             leg.walk_proceed(thrt) # continue the increment on each walk path
-        #for i in range(0,8):
-        #    self.should_switch_leg(i)
-        if self.should_switch_leg(self.step_counter):
-            #print(self.step_counter)
-            self.step_counter += 1
-            if self.step_counter >= 8:
-                self.step_counter = 0
+        for i in range(0,8):
+            self.should_switch_leg(i)
+        #if self.should_switch_leg(self.step_counter):
+        #    #print(self.step_counter)
+        #    self.step_counter += 1
+        #    if self.step_counter >= 8:
+        #        self.step_counter = 0
                 
     def should_switch_leg(self, ID):
         if self.legs[ID].is_done():
@@ -184,6 +185,8 @@ def test():
     #SC.test_leg(0)
     #SC.leg_test_range(4, 10, 4, 6, 18)
     #SC.leg_test_range(0, 5.5, -0.5, 10, 15)
+
+    #SC.reset_all_servos()
     SC.walk_test(0.2) 
     '''
     inner front leg
