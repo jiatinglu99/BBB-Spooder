@@ -1,6 +1,6 @@
 from pyPS4Controller.controller import Controller
 
-class MyController(Controller):
+class RemoteController(Controller):
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
         self.l3_up = 0
@@ -115,7 +115,3 @@ class MyController(Controller):
         self.r3_down = 0
         self.r3_left = 0
         self.r3_right = 0
-
-# Testing:
-controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=True)
-controller.listen()
