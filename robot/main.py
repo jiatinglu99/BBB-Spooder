@@ -1,5 +1,5 @@
 from driver.servo.central import ServoCentral
-from driver.remote.central import RemoteCentral
+from driver.remote.central import RemoteController
 
 import time
 
@@ -9,7 +9,8 @@ class Robot:
     def __init__(self):
         self.FREQ = 200  # updates per second
         self.servo_central = ServoCentral()
-        self.remote_control = RemoteCentral()
+        self.remote_control = RemoteController(interface="/dev/input/js0", connecting_using_ds4drv=True)
+        self.remote_control.listen()
 
     ### Might have a problem when we are walking and don't want to use PID. Anyway, sets up PID and starts updating
     def start_updating(self):
