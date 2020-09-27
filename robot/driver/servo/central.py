@@ -74,13 +74,14 @@ class ServoCentral:
             return False
 
     def run(self):
+        # make sure to flush before calculating, better timing efficiency
+        self.ser.flush()
         for leg in self.legs:
             try:
                 leg.daniel_calculate_angles()
             except ValueError as e:
                 print(e)
         self.push_position()
-        self.ser.flush()
 
     def stretch_legs(self):
         for leg in self.legs:
@@ -187,7 +188,7 @@ def test():
     #SC.leg_test_range(0, 5.5, -0.5, 10, 15)
 
     #SC.reset_all_servos()
-    SC.walk_test(0.2) 
+    SC.walk_test(0.05) 
     '''
     inner front leg
     ID  Front   Back    Out     Height

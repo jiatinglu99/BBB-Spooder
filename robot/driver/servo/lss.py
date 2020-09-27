@@ -10,7 +10,7 @@ class Servo:
         self.ID = ID
         self.current_position = 0.0
         self.desired_position = 0.0
-        self.current_amp = 0
+        self.current_amp = 0.0
         self.polarity = polarity
         self.offset = offset
         

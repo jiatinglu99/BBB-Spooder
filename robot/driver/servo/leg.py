@@ -18,17 +18,17 @@ class Leg:
         # storing ID numbers for all
         self.IDlist = [ID1, ID2, ID3]
         # Acquire position for each servo upon power up
-        self.desired_coordinates = [17,15,10]
+        self.desired_coordinates = [17.0,15.0,10.0]
         self.current_coordinates = self.acquire_positions()
         
-        self.safe_walking_range = (0,0,0,0) # (front_extreme, back_extreme, extention_out, normal_height)
+        self.safe_walking_range = (0.0,0.0,0.0,0.0) # (front_extreme, back_extreme, extention_out, normal_height)
         self.config_init()
         self.increment = 0
         self.lift = False # lift actually means "is stepping back"
         self.SWITCH_NOW = False
 
     def acquire_positions(self):
-        return [0,0,0]
+        return [0.0,0.0,0.0]
 
     def config_init(self):
         if self.sel == 4:
@@ -98,9 +98,9 @@ class Leg:
         angle_b = asin((self.length_c*sin(180-angle_c)/S))-M
         
         if self.sel == 4 or self.sel == 5:
-            angle_a -= 90
+            angle_a -= 90.0
         elif self.sel == 6  or self.sel == 7:
-            angle_a += 90
+            angle_a += 90.0
         self.servos[0].update_desired_position(angle_a)
         self.servos[1].update_desired_position(angle_b)
         self.servos[2].update_desired_position(-angle_c)
@@ -109,7 +109,7 @@ class Leg:
         self.increment = thrt
         temp = self.desired_coordinates
         if self.lift:
-            self.desired_coordinates = [temp[0] + self.increment*5 ,temp[1],temp[2]]
+            self.desired_coordinates = [temp[0] + self.increment*5.0 ,temp[1],temp[2]]
             #if self.sel == 4: print(temp[0])
             if temp[0] > self.safe_walking_range[0]:
                 self.lift = False
