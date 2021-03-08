@@ -1,7 +1,7 @@
 #from robot.driver.servo.lss import Servo
 #from robot.driver.helpers.DegreeMath import *
-from lss import Servo
-from helpers import *
+from .lss import Servo
+from .helpers import *
 
 import time
 

@@ -1,4 +1,4 @@
-from leg import Leg
+from .leg import Leg
 
 import serial
 import time
@@ -40,7 +40,7 @@ class ServoCentral:
             self.walk_main(thrt)
             self.run()
             elapsed_time = time.time() - self.t
-            print 1.0/elapsed_time
+            print(1.0/elapsed_time)
             self.t = time.time()
             
     # move each legs to i/8th of the entire period
