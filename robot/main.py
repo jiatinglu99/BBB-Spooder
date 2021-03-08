@@ -10,32 +10,32 @@ class Robot:
     def __init__(self):
         self.FREQ = 200  # updates per second
         self.servo_central = ServoCentral()
-        self.remote_control = RemoteController(interface="/dev/input/js0", connecting_using_ds4drv=True)
-        self.remote_control.listen()
+        self.remote_control = RemoteController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+        self.remote_control.listen(on_connect = self.start_updating)
 
     ### Might have a problem when we are walking and don't want to use PID. Anyway, sets up PID and starts updating
     def start_updating(self):
         # create last_command variable for future loops
-        self.last_command = None
+        #self.last_command = None
         # update
         while True:
-            if self.last_command == None: continue                              # still waiting for the initial connection
+            #if self.last_command == None: continue                              # still waiting for the initial connection
 
             # check if we have effectively disconnected (elapsed time > 2s)
-            if time.time() - self.last_command.timestamp > 2:
-                print('We might have disconnected.')
-                print('Take appropriate stabilizing/landing action.')
-                continue
+            #if time.time() - self.last_command.timestamp > 2:
+                # print('We might have disconnected.')
+                # print('Take appropriate stabilizing/landing action.')
+                # continue
 
             # take appropriate action given command type
-            type, body = self.last_command.type, self.last_command.body
+            #type, body = self.last_command.type, self.last_command.body
             if type == RemoteControl.CMD_UPDATE:
                 commands = [body[i:i+4] for i in range(0, len(body), 4)]        # commands always come in as XXXX XXXX YYYY
-                self.handle_quad_pid(self.normalize_components(commands))       # handle quad movement after normalizing components
+                #self.handle_quad_pid(self.normalize_components(commands))       # handle quad movement after normalizing components
             elif type == RemoteControl.CMD_MODE:
                 print('Set mode', body)
 
-            time.sleep(1 / self.FREQ)
+            #time.sleep(1 / self.FREQ)
 
     ### Normalizes the command components, where forward direction is with the antennae on the __backside__.
     def normalize_components(self, commands):
