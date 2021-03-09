@@ -3,15 +3,18 @@ from driver.remote.central import RemoteController
 #from driver.sensor.central import SensorCentral
 
 import time
+import threading
 
 
 class Robot:
     ### Initializes the robot and all its peripheral centrals
     def __init__(self):
         self.FREQ = 200  # updates per second
-        self.servo_central = ServoCentral()
+        self.servo_central = ServoCentral(free = False, freq = 45)
         self.remote_control = RemoteController(interface="/dev/input/js0", connecting_using_ds4drv=False)
-        self.remote_control.listen(on_connect = self.start_updating)
+        self.remote_control.start()
+        self.servo_central.walk_test(0.05)
+        self.remote_control.join()
 
     ### Might have a problem when we are walking and don't want to use PID. Anyway, sets up PID and starts updating
     def start_updating(self):
@@ -56,4 +59,4 @@ class Robot:
 
 if __name__ == "__main__":
     robot = Robot()
-    robot.start_updating()
+    #robot.start_updating()
