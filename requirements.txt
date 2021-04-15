@@ -1,0 +1,4 @@
+wheel
+pyserial
+rcpy
+pyPS4Controller

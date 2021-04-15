@@ -1,10 +1,13 @@
-from leg import Leg
+try:
+    from .leg import Leg
+except Exception:
+    from leg import Leg
 
 import serial
 import time
 
 class ServoCentral:
-    def __init__(self):
+    def __init__(self, free = False, freq = 45):
         self.status = 0
         '''
         Number      Status
@@ -12,6 +15,9 @@ class ServoCentral:
         1           Working, and providing torque
         2           Limp
         '''
+
+        self.desired_freq = freq
+        self.no_limit = free
         
         #Walk Sequences
         self.step_counter = 0
@@ -39,8 +45,15 @@ class ServoCentral:
         while True:
             self.walk_main(thrt)
             self.run()
-            elapsed_time = time.time() - self.t
-            print 1.0/elapsed_time
+            while True:
+                elapsed_time = time.time() - self.t
+                if self.no_limit:
+                    break
+                if elapsed_time < 1.0/self.desired_freq: 
+                    time.sleep(0.0001)
+                else:
+                    break
+            print('Actual Update Frequency: '+str(round(1.0/elapsed_time, 2)), end = '\r')
             self.t = time.time()
             
     # move each legs to i/8th of the entire period
@@ -116,11 +129,11 @@ class ServoCentral:
             for number in range(0,2):
                 self.legs[number].update_desired_coordinates(2, out, m)
             for number in range(2,4):
-                self.legs[number].update_desired_coordinates(-2, out, m)#)m)
-            self.legs[4].update_desired_coordinates(10, out, m)#)m)
-            self.legs[5].update_desired_coordinates(10, out, m)#)m)
-            self.legs[6].update_desired_coordinates(-10, out, m)#)m)
-            self.legs[7].update_desired_coordinates(-10, out, m)#)m)
+                self.legs[number].update_desired_coordinates(-2, out, m)
+            self.legs[4].update_desired_coordinates(10, out, m)
+            self.legs[5].update_desired_coordinates(10, out, m)
+            self.legs[6].update_desired_coordinates(-10, out, m)
+            self.legs[7].update_desired_coordinates(-10, out, m)
             #for number in range(0,8):
             #    self.legs[number].daniel_calculate_angles()
             

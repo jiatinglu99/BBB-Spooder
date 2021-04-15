@@ -1,1 +1,8 @@
+<<<<<<< HEAD
 .vscode
+=======
+*.pyc
+.vscode
+__pycache__
+spooder.code-workspace
+>>>>>>> a63accf792d212cb0aea900c891490a3e0c11f37
